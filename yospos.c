@@ -1,9 +1,7 @@
 
 #include <string.h>
-
-typedef unsigned char byte;
-typedef unsigned short word;
-typedef signed char sbyte;
+#include "shape.h"
+#include "types.h"
 
 word __at(0xa000) dvgram[0x1000];
 byte __at(0x8840) _dvgstart;
@@ -47,6 +45,8 @@ __asm
 __endasm;
   main();
 }
+
+//#link "shape.c"
 
 // VECTOR ROUTINES
 
@@ -113,13 +113,6 @@ enum {
   BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, YELLOW, WHITE
 } Color;
 
-// A Mathbox vector point. Fields are deltaX, deltaY, and vector brightness.
-typedef struct 
-{
-  int dX, dY;
-  byte brightness;
-} MathboxPoint;
-
 MathboxPoint square_points[4] = {
   { 200, 0, 4 },
   { 0, 200, 4 },
@@ -129,28 +122,11 @@ MathboxPoint square_points[4] = {
 byte square_point_count = 4;
 MathboxPoint square_pos_offset = { -50, -50, 0 };
 
-typedef struct shape_t {
-  MathboxPoint *geometry;
-  MathboxPoint offset;
-  byte number_of_points;
-} Shape;
-
 #define MB_POINT_DX 0
 #define MB_POINT_DY 1
 #define MB_POINT_BRT 2
 
-void SHAPE_SetOffset(Shape *shape, int _dx, int _dy)
-{
-  shape->offset.dX = _dx;
-  shape->offset.dY = _dy;
-  shape->offset.brightness = 0;
-}
-
-void SHAPE_Init(Shape *shape, MathboxPoint *_geometry, byte _number_of_points)
-{
-  shape->geometry = _geometry;
-  shape->number_of_points = _number_of_points;
-}
+//#link shape.c
 
 void main() {
   Shape shape;
